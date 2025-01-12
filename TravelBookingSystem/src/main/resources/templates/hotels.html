@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Hotel Management</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h1 class="text-center">Hotel Management</h1>
+
+    <!-- Form for Adding/Updating Hotels -->
+    <form th:action="@{/hotels/add}" method="post" class="mt-4">
+        <div class="form-group">
+            <label for="name">Hotel Name</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Enter hotel name" required>
+        </div>
+
+        <div class="form-group">
+            <label for="location">Location</label>
+            <input type="text" class="form-control" id="location" name="location" placeholder="Enter hotel location" required>
+        </div>
+
+        <div class="form-group">
+            <label for="availableRooms">Available Rooms</label>
+            <input type="number" class="form-control" id="availableRooms" name="availableRooms" placeholder="Enter number of available rooms" required>
+        </div>
+
+        <div class="form-group">
+            <label for="pricePerNight">Price Per Night</label>
+            <input type="number" step="0.01" class="form-control" id="pricePerNight" name="pricePerNight" placeholder="Enter price per night" required>
+        </div>
+
+        <div class="form-group">
+            <label for="status">Status</label>
+            <select class="form-control" id="status" name="status" required>
+                <option value="AVAILABLE">Available</option>
+                <option value="BOOKED">Booked</option>
+                <option value="CLOSED">Closed</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Save Hotel</button>
+    </form>
+
+    <!-- List of Hotels -->
+    <h2 class="mt-5 text-center">Available Hotels</h2>
+    <table class="table table-bordered table-striped mt-3">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Location</th>
+            <th>Available Rooms</th>
+            <th>Price/Night</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="hotel : ${hotels}">
+            <td th:text="${hotel.id}"></td>
+            <td th:text="${hotel.name}"></td>
+            <td th:text="${hotel.location}"></td>
+            <td th:text="${hotel.availableRooms}"></td>
+            <td th:text="${hotel.pricePerNight}"></td>
+            <td th:text="${hotel.status}"></td>
+            <td>
+                <a th:href="@{/hotels/edit/{id}(id=${hotel.id})}" class="btn btn-warning btn-sm">Edit</a>
+                <a th:href="@{/hotels/delete/{id}(id=${hotel.id})}" class="btn btn-danger btn-sm"
+                   onclick="return confirm('Are you sure you want to delete this hotel?');">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

@@ -13,7 +13,6 @@ public class Flight {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     @Column(nullable = false)
     private String airline; // Name of the airline
     @Column(nullable = false)

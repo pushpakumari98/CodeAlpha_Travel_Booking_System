@@ -1,98 +1,111 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Manage Flights</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flight Management</title>
+  <link rel="icon" href="/images/favicon.ico">
+  <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-<div class="container mt-5">
-  <h1 class="text-center">Flight Management</h1>
+<!-- Header -->
+<header th:insert="~{fragments/header.html}"></header>
 
-  <!-- Form for Adding/Updating Flights -->
-  <form th:action="@{/flights/add}" method="post" class="mt-4">
-    <div class="form-group">
-      <label for="airline">Airline</label>
-      <input type="text" class="form-control" id="airline" name="airline" placeholder="Enter airline name" required>
-    </div>
+<!-- Main Content -->
+<main class="container mt-5">
+  <b><h1 class="text-center">Flight Management</h1></b>
 
-    <div class="form-group">
-      <label for="departure">Departure</label>
-      <input type="text" class="form-control" id="departure" name="departure" placeholder="Enter departure city/airport" required>
-    </div>
+  <!-- Flight List -->
+  <section class="mt-5">
+    <h2 class="text-center">Available Flights</h2>
+    <table class="table table-bordered table-striped mt-3">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Airline</th>
+        <th>Departure</th>
+        <th>Destination</th>
+        <th>Departure Time</th>
+        <th>Arrival Time</th>
+        <th>Price</th>
+        <th>Seats</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="flight : ${flights}">
+        <td th:text="${flight.id}"></td>
+        <td th:text="${flight.airline}"></td>
+        <td th:text="${flight.departure}"></td>
+        <td th:text="${flight.destination}"></td>
+        <td th:text="${#dates.format(flight.departureTime, 'yyyy-MM-dd HH:mm')}"></td>
+        <td th:text="${#dates.format(flight.arrivalTime, 'yyyy-MM-dd HH:mm')}"></td>
+        <td th:text="${flight.price}"></td>
+        <td th:text="${flight.availableSeats}"></td>
+        <td th:text="${flight.status}"></td>
+        <td>
+          <a th:href="@{/flights/edit/{id}(id=${flight.id})}" class="btn btn-warning btn-sm">Edit</a>
+          <a th:href="@{/flights/delete/{id}(id=${flight.id})}" class="btn btn-danger btn-sm"
+             onclick="return confirm('Are you sure you want to delete this flight?');">Delete</a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </section>
 
-    <div class="form-group">
-      <label for="destination">Destination</label>
-      <input type="text" class="form-control" id="destination" name="destination" placeholder="Enter destination city/airport" required>
-    </div>
+  <h2 class="text-center">Add Flights</h2>
+  <!-- Add/Update Flight Form -->
+  <section class="mt-4">
+    <form id="form" th:action="@{addflights}" th:object="${addflights}"  class="form" method="post">
+      <div class="form-group">
+        <label for="airline">Airline</label>
+        <input type="text" class="form-control" id="airline" name="airline" placeholder="Enter airline name" required>
+      </div>
+      <div class="form-group">
+        <label for="departure">Departure</label>
+        <input type="text" class="form-control" id="departure" name="departure" placeholder="Enter departure city/airport" required>
+      </div>
+      <div class="form-group">
+        <label for="destination">Destination</label>
+        <input type="text" class="form-control" id="destination" name="destination" placeholder="Enter destination city/airport" required>
+      </div>
+      <div class="form-group">
+        <label for="departureTime">Departure Time</label>
+        <input type="datetime-local" class="form-control" id="departureTime" name="departureTime" required>
+      </div>
+      <div class="form-group">
+        <label for="arrivalTime">Arrival Time</label>
+        <input type="datetime-local" class="form-control" id="arrivalTime" name="arrivalTime" required>
+      </div>
+      <div class="form-group">
+        <label for="price">Price</label>
+        <input type="number" step="0.01" class="form-control" id="price" name="price" placeholder="Enter ticket price" required>
+      </div>
+      <div class="form-group">
+        <label for="availableSeats">Available Seats</label>
+        <input type="number" class="form-control" id="availableSeats" name="availableSeats" placeholder="Enter number of available seats" required>
+      </div>
+      <div class="form-group">
+        <label for="status">Status</label>
+        <select class="form-control" id="status" name="status" required>
+          <option value="ON_TIME">On Time</option>
+          <option value="DELAYED">Delayed</option>
+          <option value="CANCELLED">Cancelled</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Save Flight</button>
+    </form>
+  </section>
 
-    <div class="form-group">
-      <label for="departureTime">Departure Time</label>
-      <input type="datetime-local" class="form-control" id="departureTime" name="departureTime" required>
-    </div>
+</main>
 
-    <div class="form-group">
-      <label for="arrivalTime">Arrival Time</label>
-      <input type="datetime-local" class="form-control" id="arrivalTime" name="arrivalTime" required>
-    </div>
+<!-- Footer -->
+<footer th:insert="~{fragments/footer.html}"></footer>
 
-    <div class="form-group">
-      <label for="price">Price</label>
-      <input type="number" step="0.01" class="form-control" id="price" name="price" placeholder="Enter ticket price" required>
-    </div>
-
-    <div class="form-group">
-      <label for="availableSeats">Available Seats</label>
-      <input type="number" class="form-control" id="availableSeats" name="availableSeats" placeholder="Enter number of available seats" required>
-    </div>
-
-    <div class="form-group">
-      <label for="status">Status</label>
-      <select class="form-control" id="status" name="status" required>
-        <option value="ON_TIME">On Time</option>
-        <option value="DELAYED">Delayed</option>
-        <option value="CANCELLED">Cancelled</option>
-      </select>
-    </div>
-
-    <button type="submit" class="btn btn-primary btn-block">Save Flight</button>
-  </form>
-
-  <!-- List of Flights -->
-  <h2 class="mt-5 text-center">Available Flights</h2>
-  <table class="table table-bordered table-striped mt-3">
-    <thead>
-    <tr>
-      <th>ID</th>
-      <th>Airline</th>
-      <th>Departure</th>
-      <th>Destination</th>
-      <th>Departure Time</th>
-      <th>Arrival Time</th>
-      <th>Price</th>
-      <th>Seats</th>
-      <th>Status</th>
-      <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="flight : ${flights}">
-      <td th:text="${flight.id}"></td>
-      <td th:text="${flight.airline}"></td>
-      <td th:text="${flight.departure}"></td>
-      <td th:text="${flight.destination}"></td>
-      <td th:text="${#dates.format(flight.departureTime, 'yyyy-MM-dd HH:mm')}"></td>
-      <td th:text="${#dates.format(flight.arrivalTime, 'yyyy-MM-dd HH:mm')}"></td>
-      <td th:text="${flight.price}"></td>
-      <td th:text="${flight.availableSeats}"></td>
-      <td th:text="${flight.status}"></td>
-      <td>
-        <a th:href="@{/flights/edit/{id}(id=${flight.id})}" class="btn btn-warning btn-sm">Edit</a>
-        <a th:href="@{/flights/delete/{id}(id=${flight.id})}" class="btn btn-danger btn-sm"
-           onclick="return confirm('Are you sure you want to delete this flight?');">Delete</a>
-      </td>
-    </tr>
-    </tbody>
-  </table>
-</div>
+<!-- Scripts -->
+<script src="/js/jquery.js"></script>
+<script src="/js/script.js"></script>
 </body>
 </html>

@@ -8,11 +8,13 @@ import java.util.Optional;
 @Service
 public interface FlightService {
 
+
+
     // Method to retrieve all flights
     List<Flight> getAllFlights();
 
     // Method to retrieve a flight by its ID
-    Optional<Flight> getFlightById(Long id);
+    public Flight getFlightById(Long id);
 
     // Method to create a new flight
     Flight createFlight(Flight flight);
@@ -20,6 +22,6 @@ public interface FlightService {
     // Method to update an existing flight
     Flight updateFlight(Flight flight);
 
-    // Method to delete a flight by its ID
-    void deleteFlight(Long id);
+
+    String  deleteFlightById(Long id) ;
 }

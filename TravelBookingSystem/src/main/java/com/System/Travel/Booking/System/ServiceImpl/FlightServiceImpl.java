@@ -23,9 +23,10 @@ public class FlightServiceImpl implements FlightService {
     }
 
     // Retrieve a flight by ID
+
     @Override
-    public Optional<Flight> getFlightById(Long id) {
-        return flightRepository.findById(id);
+    public Flight getFlightById(Long id) {
+        return flightRepository.findById(id).orElse(null); // Return null if not found
     }
 
     // Create a new flight
@@ -42,7 +43,17 @@ public class FlightServiceImpl implements FlightService {
 
     // Delete a flight by ID
     @Override
-    public void deleteFlight(Long id) {
-        flightRepository.deleteById(id);
+    public String deleteFlightById(Long id) {
+        if(flightRepository.existsById(id))
+        {
+            flightRepository.deleteById(id);
+        }
+        else{
+            System.out.println(" Flight Id Not Found");
+        }
+        return "Flight deleted successfully";
     }
+
+
+
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,37 +15,6 @@
 <!-- Main Content -->
 <main class="container mt-5">
     <h1 class="text-center">Hotel Management</h1>
-
-    <!-- Add/Update Hotel Form -->
-    <section class="mt-4">
-        <form th:action="@{/hotels/add}" method="post" class="form">
-            <div class="form-group">
-                <label for="name">Hotel Name</label>
-                <input type="text" class="form-control" id="name" name="name" placeholder="Enter hotel name" required>
-            </div>
-            <div class="form-group">
-                <label for="location">Location</label>
-                <input type="text" class="form-control" id="location" name="location" placeholder="Enter hotel location" required>
-            </div>
-            <div class="form-group">
-                <label for="availableRooms">Available Rooms</label>
-                <input type="number" class="form-control" id="availableRooms" name="availableRooms" placeholder="Enter number of available rooms" required>
-            </div>
-            <div class="form-group">
-                <label for="pricePerNight">Price Per Night</label>
-                <input type="number" step="0.01" class="form-control" id="pricePerNight" name="pricePerNight" placeholder="Enter price per night" required>
-            </div>
-            <div class="form-group">
-                <label for="status">Status</label>
-                <select class="form-control" id="status" name="status" required>
-                    <option value="AVAILABLE">Available</option>
-                    <option value="BOOKED">Booked</option>
-                    <option value="CLOSED">Closed</option>
-                </select>
-            </div>
-            <button type="submit" class="btn btn-primary btn-block">Save Hotel</button>
-        </form>
-    </section>
 
     <!-- Hotel List -->
     <section class="mt-5">
@@ -79,6 +48,44 @@
             </tbody>
         </table>
     </section>
+
+
+<!-- Add/Update Hotel Form -->
+<section class="mt-4">
+    <h2 class="text-center">Hotels</h2>
+    <form id="form" th:action="@{addhotels}" th:object="${addHotels}" method="post" class="form">
+        <div class="form-group">
+            <label for="id">Id</label>
+            <input type="number" class="form-control" id="id" name="id" placeholder="Enter hotel Id" required>
+        </div>
+
+        <div class="form-group">
+            <label for="name">Hotel Name</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Enter hotel name" required>
+        </div>
+        <div class="form-group">
+            <label for="location">Location</label>
+            <input type="text" class="form-control" id="location" name="location" placeholder="Enter hotel location" required>
+        </div>
+        <div class="form-group">
+            <label for="availableRooms">Available Rooms</label>
+            <input type="number" class="form-control" id="availableRooms" name="availableRooms" placeholder="Enter number of available rooms" required>
+        </div>
+        <div class="form-group">
+            <label for="pricePerNight">Price Per Night</label>
+            <input type="number" step="0.01" class="form-control" id="pricePerNight" name="pricePerNight" placeholder="Enter price per night" required>
+        </div>
+        <div class="form-group">
+            <label for="status">Status</label>
+            <select class="form-control" id="status" name="status" required>
+                <option value="AVAILABLE">Available</option>
+                <option value="BOOKED">Booked</option>
+                <option value="CLOSED">Closed</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Save Hotel</button>
+    </form>
+ </section>
 </main>
 
 <!-- Footer -->

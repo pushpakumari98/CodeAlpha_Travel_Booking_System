@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/api/hotels")
@@ -21,14 +21,19 @@ public class HotelController {
     // Get all hotels
     @GetMapping
     public List<Hotel> getAllHotels() {
+
         return hotelService.getAllHotels();
     }
 
     // Get hotel by ID
     @GetMapping("/{id}")
     public ResponseEntity<Hotel> getHotelById(@PathVariable Long id) {
-        Optional<Hotel> hotel = hotelService.getHotelById(id);
-        return hotel.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        Hotel hotel = hotelService.getHotelById(id);
+        if (hotel != null) { // Check if the flight exists
+            return ResponseEntity.ok(hotel);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     // Create a new hotel
@@ -41,9 +46,10 @@ public class HotelController {
     // Update an existing hotel
     @PutMapping("/{id}")
     public ResponseEntity<Hotel> updateHotel(@PathVariable Long id, @RequestBody Hotel hotel) {
-        Optional<Hotel> existingHotel = hotelService.getHotelById(id);
-        if (existingHotel.isPresent()) {
-            hotel.setId(id);  // Ensure the ID of the hotel being updated remains the same
+        Hotel existingHotel = hotelService.getHotelById(id);
+
+        if (existingHotel != null) { // Check if the flight exists
+            hotel.setId(id); // Ensure the ID remains consistent
             Hotel updatedHotel = hotelService.updateHotel(hotel);
             return ResponseEntity.ok(updatedHotel);
         } else {
@@ -54,11 +60,12 @@ public class HotelController {
     // Delete a hotel
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteHotel(@PathVariable Long id) {
-        if (hotelService.getHotelById(id).isPresent()) {
-            hotelService.deleteHotel(id);
-            return ResponseEntity.noContent().build();
+        Hotel hotel = hotelService.getHotelById(id); // Retrieve the hotel directly
+        if (hotel != null) { // Check if the hotel exists
+            hotelService.deleteHotelById(id); // Delete the hotel
+            return ResponseEntity.noContent().build(); // Return 204 No Content
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.notFound().build(); // Return 404 Not Found
         }
     }
 }

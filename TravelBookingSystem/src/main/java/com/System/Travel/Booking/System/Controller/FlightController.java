@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/flights")
@@ -25,11 +24,17 @@ public class FlightController {
     }
 
     // Get flight by ID
+
     @GetMapping("/{id}")
     public ResponseEntity<Flight> getFlightById(@PathVariable Long id) {
-        Optional<Flight> flight = flightService.getFlightById(id);
-        return flight.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        Flight flight = flightService.getFlightById(id); // Directly retrieve the flight
+        if (flight != null) { // Check if the flight exists
+            return ResponseEntity.ok(flight);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
+
 
     // Create a new flight
     @PostMapping
@@ -39,11 +44,12 @@ public class FlightController {
     }
 
     // Update an existing flight
+
     @PutMapping("/{id}")
     public ResponseEntity<Flight> updateFlight(@PathVariable Long id, @RequestBody Flight flight) {
-        Optional<Flight> existingFlight = flightService.getFlightById(id);
-        if (existingFlight.isPresent()) {
-            flight.setId(id);  // Ensure the ID of the flight being updated remains the same
+        Flight existingFlight = flightService.getFlightById(id); // Directly retrieve the flight
+        if (existingFlight != null) { // Check if the flight exists
+            flight.setId(id); // Ensure the ID remains consistent
             Flight updatedFlight = flightService.updateFlight(flight);
             return ResponseEntity.ok(updatedFlight);
         } else {
@@ -51,14 +57,18 @@ public class FlightController {
         }
     }
 
+
     // Delete a flight
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteFlight(@PathVariable Long id) {
-        if (flightService.getFlightById(id).isPresent()) {
-            flightService.deleteFlight(id);
-            return ResponseEntity.noContent().build();
+        Flight flight = flightService.getFlightById(id); // Retrieve the flight directly
+        if (flight != null) { // Check if the flight exists
+            flightService.deleteFlightById(id); // Delete the flight
+            return ResponseEntity.noContent().build(); // Return 204 No Content
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.notFound().build(); // Return 404 Not Found
         }
     }
+
 }

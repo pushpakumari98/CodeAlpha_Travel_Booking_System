@@ -24,8 +24,8 @@ public class HotelServiceImpl implements HotelService {
 
     // Retrieve a hotel by ID
     @Override
-    public Optional<Hotel> getHotelById(Long id) {
-        return hotelRepository.findById(id);
+    public Hotel getHotelById(Long id) {
+        return hotelRepository.findById(id).orElse(null);
     }
 
     // Create a new hotel
@@ -42,7 +42,14 @@ public class HotelServiceImpl implements HotelService {
 
     // Delete a hotel by ID
     @Override
-    public void deleteHotel(Long id) {
-        hotelRepository.deleteById(id);
+    public String deleteHotelById(Long id) {
+        if(hotelRepository.existsById(id))
+        {
+            hotelRepository.deleteById(id);
+        }
+        else{
+            System.out.println(" Hotel Id Not Found");
+        }
+        return "Hotel deleted successfully";
     }
 }

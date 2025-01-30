@@ -14,15 +14,15 @@
 
 <!-- Main Content -->
 <main class="container mt-5">
-  <b><h1 class="text-center">Flight Management</h1></b>
+  <h1 class="text-center">Flight Management</h1>
 
   <!-- Flight List -->
   <section class="mt-5">
     <h2 class="text-center">Available Flights</h2>
-    <table class="table table-bordered table-striped mt-3">
+    <table class="table table-bordered table-striped">
       <thead>
       <tr>
-        <th>ID</th>
+        <th>Id</th>
         <th>Airline</th>
         <th>Departure</th>
         <th>Destination</th>
@@ -35,30 +35,35 @@
       </tr>
       </thead>
       <tbody>
-      <tr th:each="flight : ${flights}">
-        <td th:text="${flight.id}"></td>
-        <td th:text="${flight.airline}"></td>
-        <td th:text="${flight.departure}"></td>
-        <td th:text="${flight.destination}"></td>
-        <td th:text="${#dates.format(flight.departureTime, 'yyyy-MM-dd HH:mm')}"></td>
-        <td th:text="${#dates.format(flight.arrivalTime, 'yyyy-MM-dd HH:mm')}"></td>
-        <td th:text="${flight.price}"></td>
-        <td th:text="${flight.availableSeats}"></td>
-        <td th:text="${flight.status}"></td>
+      <tr th:each="f : ${flights}">
+        <td th:text="${f.id}"></td>
+        <td th:text="${f.airline}"></td>
+        <td th:text="${f.departure}"></td>
+        <td th:text="${f.destination}"></td>
+        <td th:text="${#dates.format(f.departureTime, 'yyyy-MM-dd HH:mm')}"></td>
+        <td th:text="${#dates.format(f.arrivalTime, 'yyyy-MM-dd HH:mm')}"></td>
+        <td th:text="${f.price}"></td>
+        <td th:text="${f.availableSeats}"></td>
+        <td th:text="${f.status}"></td>
         <td>
-          <a th:href="@{/flights/edit/{id}(id=${flight.id})}" class="btn btn-warning btn-sm">Edit</a>
-          <a th:href="@{/flights/delete/{id}(id=${flight.id})}" class="btn btn-danger btn-sm"
-             onclick="return confirm('Are you sure you want to delete this flight?');">Delete</a>
+          <a th:href="@{/editFlight/{id}(id=${f.flightId})}" class="btn btn-warning btn-sm">Edit</a>
+          <a th:href="@{/deleteFlight/{id}(id=${f.flightId})}" class="btn btn-danger btn-sm">Delete</a>
         </td>
       </tr>
       </tbody>
     </table>
   </section>
 
-  <h2 class="text-center">Add Flights</h2>
+  <hr>
+
   <!-- Add/Update Flight Form -->
   <section class="mt-4">
-    <form id="form" th:action="@{addflights}" th:object="${addflights}"  class="form" method="post">
+    <h2 class="text-center">Add Flights</h2>
+    <form id="form" th:action="@{addflights}" th:object="${addFlights}" class="form" method="post">
+      <div class="form-group">
+        <label for="id">Id</label>
+        <input type="number" class="form-control" id="id" name="id" placeholder="Enter airline Id" required>
+      </div>
       <div class="form-group">
         <label for="airline">Airline</label>
         <input type="text" class="form-control" id="airline" name="airline" placeholder="Enter airline name" required>
@@ -98,7 +103,6 @@
       <button type="submit" class="btn btn-primary btn-block">Save Flight</button>
     </form>
   </section>
-
 </main>
 
 <!-- Footer -->
